@@ -63,6 +63,7 @@ class AppiumEnhanceLibrary(object):
         See also `Wait Until Page Contains`, `Wait Until Page Contains
         Element`, `Wait For Condition`.
         """
+
         def check_visibility():
             visible = self._is_visible(locator)
             if visible:
@@ -74,6 +75,7 @@ class AppiumEnhanceLibrary(object):
             else:
                 return error or "Element '%s' was not visible in %s" % \
                                 (locator, self.apu._format_timeout(timeout))
+
         self.apu._wait_until_no_error(timeout, check_visibility)
 
     def wait_until_element_is_not_visible(self, locator, timeout=None,
@@ -89,6 +91,7 @@ class AppiumEnhanceLibrary(object):
         See also `Wait Until Page Contains`, `Wait Until Page Contains
         Element`, `Wait For Condition`.
         """
+
         def check_hidden():
             visible = self._is_visible(locator)
             if not visible:
@@ -100,6 +103,7 @@ class AppiumEnhanceLibrary(object):
             else:
                 return error or "Element '%s' was still visible in %s" % \
                                 (locator, self.apu._format_timeout(timeout))
+
         self.apu._wait_until_no_error(timeout, check_hidden)
 
     def element_should_be_visible(self, locator, message=''):
@@ -138,6 +142,60 @@ class AppiumEnhanceLibrary(object):
                 message = "The element '%s' should not be visible, " \
                           "but it is." % locator
             raise AssertionError(message)
+
+    def wait_until_element_contains(self, locator, text, timeout=None,
+                                    error=None):
+        """Waits until given element contains `text`.
+
+        Fails if `timeout` expires before the text appears on given element.
+        See `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains Element`
+        , `Wait For Condition`, `Wait Until Element Is Visible`.
+        """
+        element = self.apu._element_find(locator, True, True)
+
+        def check_text():
+            actual = element.text
+            if text in actual:
+                return
+            else:
+                return error or "Text '%s' did not appear in %s to element " \
+                                "'%s'. Its text was '%s'." \
+                                % (text, self.apu._format_timeout(timeout),
+                                   locator, actual)
+
+        self.apu._wait_until_no_error(timeout, check_text)
+
+    def wait_until_element_does_not_contain(self, locator, text,
+                                            timeout=None, error=None):
+        """Waits until given element does not contain `text`.
+
+        Fails if `timeout` expires before the text disappears from given
+        element. See `introduction` for more information about `timeout` and
+        its default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains Element`
+        , `Wait For Condition`, `Wait Until Element Is Visible`.
+        """
+        element = self.apu._element_find(locator, True, True)
+
+        def check_text():
+            actual = element.text
+            if text not in actual:
+                return
+            else:
+                return error or "Text '%s' did not disappear in %s from " \
+                                "element '%s'." % (text,
+                                                   self.apu._format_timeout(
+                                                       timeout), locator)
+
+        self.apu._wait_until_no_error(timeout, check_text)
 
     # Private
 
