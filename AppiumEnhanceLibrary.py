@@ -195,6 +195,24 @@ class AppiumEnhanceLibrary(object):
 
         self.apu._wait_until_no_error(timeout, check_text)
 
+    def page_should_contain(self, text, loglevel):
+        """Verify that current page contains `text`.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+        """
+        self.apu.page_should_contain_text(self, text, loglevel=loglevel)
+
+    def page_should_not_contain_text(self, text, loglevel):
+        """Verify that current page not contains `text`.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+        """
+        self.apu.page_should_not_contain_text(self, text, loglevel=loglevel)
+
     # Private
 
     def _is_visible(self, locator):
