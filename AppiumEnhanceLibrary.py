@@ -63,7 +63,6 @@ class AppiumEnhanceLibrary(object):
         See also `Wait Until Page Contains`, `Wait Until Page Contains
         Element`, `Wait For Condition`.
         """
-
         def check_visibility():
             visible = self._is_visible(locator)
             if visible:
@@ -91,7 +90,6 @@ class AppiumEnhanceLibrary(object):
         See also `Wait Until Page Contains`, `Wait Until Page Contains
         Element`, `Wait For Condition`.
         """
-
         def check_hidden():
             visible = self._is_visible(locator)
             if not visible:
@@ -107,7 +105,7 @@ class AppiumEnhanceLibrary(object):
         self.apu._wait_until_no_error(timeout, check_hidden)
 
     def element_should_be_visible(self, locator, message=''):
-        """Verifies that the element identified by `locator` is visible.
+        """Verify that the element identified by `locator` is visible.
 
         Herein, visible means that the element is logically visible,
         not optically visible in the current browser viewport. For example,
@@ -127,7 +125,7 @@ class AppiumEnhanceLibrary(object):
             raise AssertionError(message)
 
     def element_should_not_be_visible(self, locator, message=''):
-        """Verifies that the element identified by `locator` is NOT visible.
+        """Verify that the element identified by `locator` is NOT visible.
 
         This is the opposite of `Element Should Be Visible`.
 
@@ -145,7 +143,7 @@ class AppiumEnhanceLibrary(object):
 
     def wait_until_element_contains(self, locator, text, timeout=None,
                                     error=None):
-        """Waits until given element contains `text`.
+        """Wait until given element contains `text`.
 
         Fails if `timeout` expires before the text appears on given element.
         See `introduction` for more information about `timeout` and its
@@ -172,7 +170,7 @@ class AppiumEnhanceLibrary(object):
 
     def wait_until_element_does_not_contain(self, locator, text,
                                             timeout=None, error=None):
-        """Waits until given element does not contain `text`.
+        """Wait until given element does not contain `text`.
 
         Fails if `timeout` expires before the text disappears from given
         element. See `introduction` for more information about `timeout` and
