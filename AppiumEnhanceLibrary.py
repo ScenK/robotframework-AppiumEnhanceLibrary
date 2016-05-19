@@ -109,3 +109,74 @@ class AppiumEnhanceLibrary(object):
         if element is not None:
             return element.is_displayed()
         return None
+
+
+    def get_horizontal_position(self, locator):
+        """Returns horizontal position of element identified by `locator`.
+
+        The position is returned in pixels off the left side of the page,
+        as an integer. Fails if a matching element is not found.
+
+        See also `Get Vertical Position`.
+        """
+        x = self.apu.get_element_location(locator)['x']
+        return x
+
+    def get_vertical_position(self, locator):
+        """Returns vertical position of element identified by `locator`.
+
+        The position is returned in pixels off the left side of the page,
+        as an integer. Fails if a matching element is not found.
+
+        See also `Get Horizontal Position`.
+        """
+        y = self.apu.get_element_location(locator)['y']
+        return y
+
+    def get_value(self, locator):
+        """Returns the value attribute of element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        return self.apu.get_element_attribute(locator, 'value')
+
+    def get_text(self, locator):
+        """Returns the text value of element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._get_text(locator)
+
+    # Private
+    def _get_text(self, locator):
+        element = self.apu._element_find(locator, True, True)
+        if element is not None:
+            return element.text
+        return None
+
+    def wait_for_condition(self, condition, timeout=None, error=None):
+        """Waits until the given `condition` is true or `timeout` expires.
+
+        The `condition` can be arbitrary JavaScript expression but must contain
+         a return statement (with the value to be returned) at the end.
+        See `Execute JavaScript` for information about accessing the
+        actual contents of the window through JavaScript.
+
+        `error` can be used to override the default error message.
+
+        See `introduction` for more information about `timeout` and its
+        default value.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains
+        Element`, `Wait Until Element Is Visible` and BuiltIn keyword
+        `Wait Until Keyword Succeeds`.
+        """
+        if not error:
+            error = "Condition '%s' did not become true in <TIMEOUT>" % \
+                    condition
+        self._wait_until(timeout, error,
+                         lambda: self.apu._current_application().
+                         execute_script(condition) == True)
+
+
+
