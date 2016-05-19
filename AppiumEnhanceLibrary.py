@@ -213,14 +213,29 @@ class AppiumEnhanceLibrary(object):
         """
         self.apu.page_should_not_contain_text(self, text, loglevel=loglevel)
 
-    # Private
+    def wait_for_condition(self, condition, timeout=None, error=None):
+        """Waits until the given `condition` is true or `timeout` expires.
 
-    def _is_visible(self, locator):
-        element = self.apu._element_find(locator, True, False)
-        if element is not None:
-            return element.is_displayed()
-        return None
+        The `condition` can be arbitrary JavaScript expression but must contain
+         a return statement (with the value to be returned) at the end.
+        See `Execute JavaScript` for information about accessing the
+        actual contents of the window through JavaScript.
 
+        `error` can be used to override the default error message.
+
+        See `introduction` for more information about `timeout` and its
+        default value.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains
+        Element`, `Wait Until Element Is Visible` and BuiltIn keyword
+        `Wait Until Keyword Succeeds`.
+        """
+        if not error:
+            error = "Condition '%s' did not become true in <TIMEOUT>" % \
+                    condition
+        self.apu._wait_until(timeout, error,
+                             lambda: self.apu._current_application().
+                             execute_script(condition) == True)
 
     def get_horizontal_position(self, locator):
         """Returns horizontal position of element identified by `locator`.
@@ -259,35 +274,16 @@ class AppiumEnhanceLibrary(object):
         return self._get_text(locator)
 
     # Private
+
+    def _is_visible(self, locator):
+        element = self.apu._element_find(locator, True, False)
+        if element is not None:
+            return element.is_displayed()
+        return None
+
+    # Private
     def _get_text(self, locator):
         element = self.apu._element_find(locator, True, True)
         if element is not None:
             return element.text
         return None
-
-    def wait_for_condition(self, condition, timeout=None, error=None):
-        """Waits until the given `condition` is true or `timeout` expires.
-
-        The `condition` can be arbitrary JavaScript expression but must contain
-         a return statement (with the value to be returned) at the end.
-        See `Execute JavaScript` for information about accessing the
-        actual contents of the window through JavaScript.
-
-        `error` can be used to override the default error message.
-
-        See `introduction` for more information about `timeout` and its
-        default value.
-
-        See also `Wait Until Page Contains`, `Wait Until Page Contains
-        Element`, `Wait Until Element Is Visible` and BuiltIn keyword
-        `Wait Until Keyword Succeeds`.
-        """
-        if not error:
-            error = "Condition '%s' did not become true in <TIMEOUT>" % \
-                    condition
-        self._wait_until(timeout, error,
-                         lambda: self.apu._current_application().
-                         execute_script(condition) == True)
-
-
-
