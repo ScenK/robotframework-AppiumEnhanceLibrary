@@ -22,12 +22,12 @@ ___
 
 ---
 
-  | Keyword            | Argumants  |
-  | ------------------ | ---------|
+  | Keyword            | Argumants  |         |              |            |
+  | ------------------ | -----------| --------|--------------|------------|
   | Execute Javascript | code       |
   | Wait Until Element Is Visible   | locator | timeout=None | error=None |
-  | Wait Until Element Is Not Visible | locator | timeout=None | error=None |
-  | Element Should Be Visible | locator | message='' |
+  | Wait Until Element Is Not Visible | locator | timeout=None  | error=None |
+  | Element Should Be Visible | locator | message='' |    |
   | Element Should Not Be Bisible | locator | message='' |
   | Wait Until Element Contains | locator | text | timeout=None | error=None |
   | Wait Until Element Does Not Contain | locator | text | timeout=None | error=None |
