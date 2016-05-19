@@ -204,7 +204,7 @@ class AppiumEnhanceLibrary(object):
         """
         self.apu.page_should_contain_text(self, text, loglevel=loglevel)
 
-    def page_should_not_contain_text(self, text, loglevel):
+    def page_should_not_contain(self, text, loglevel):
         """Verify that current page not contains `text`.
 
         If this keyword fails, it automatically logs the page source
