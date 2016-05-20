@@ -322,8 +322,8 @@ class AppiumEnhanceLibrary(object):
             move_to_element_with_offset(element, 1, 1).\
             move_by_offset(xoffset, yoffset).click().perform()
 
-    def drag_and_drop_by_offset(self, source, xoffset, yoffset):
-        """Drag element identified with `source` which is a locator.
+    def drag_and_drop_by_offset(self, locator, xoffset, yoffset):
+        """Drag element identified with locator.
 
         Element will be moved by xoffset and yoffset, each of which is a
         negative or positive number specify the offset.
@@ -332,9 +332,13 @@ class AppiumEnhanceLibrary(object):
         | Drag And Drop By Offset | myElem | 50 | -35 |
          # Move myElem 50px right and 35px down. |
         """
-        src_elem = self.apu._element_find(source, True, True)
+        element = self.apu._element_find(locator, True, True)
+
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % locator)
+
         ActionChains(self.apu._current_application()).\
-            drag_and_drop_by_offset(src_elem, xoffset, yoffset).perform()
+            drag_and_drop_by_offset(locator, xoffset, yoffset).perform()
 
     # Private
 

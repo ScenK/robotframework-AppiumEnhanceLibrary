@@ -23,7 +23,7 @@ ___
 ---
 
 | Keyword            | Arguments  |         |              |            |
-| ------------------ | -----------| --------|--------------|------------| 
+| ------------------ | -----------| --------|--------------|------------|
 | Execute Javascript | code       |
 | Wait Until Element Is Visible   | locator | timeout=None | error=None |
 | Wait Until Element Is Not Visible | locator | timeout=None  | error=None |
@@ -38,6 +38,9 @@ ___
 | Get Vertical Position | locator |
 | Get Value | locator |
 | Get Text | locator |
+| Mouse Down At | locator | xoffset | yoffset |
+| Mouse Up At | locator | xoffset | yoffset |
+| Drag And Drop By Offset | locator | xoffset | yoffset |
 
 ## Contributing
 
