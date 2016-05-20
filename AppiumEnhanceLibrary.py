@@ -7,6 +7,7 @@ Detail imformation could be found on github.com:
     https://github.com/ScenK/robotframework-AppiumEnhanceLibrary
 """
 from robot.libraries.BuiltIn import BuiltIn
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 class AppiumEnhanceLibrary(object):
@@ -214,7 +215,7 @@ class AppiumEnhanceLibrary(object):
         self.apu.page_should_not_contain_text(self, text, loglevel=loglevel)
 
     def wait_for_condition(self, condition, timeout=None, error=None):
-        """Waits until the given `condition` is true or `timeout` expires.
+        """Wait until the given `condition` is true or `timeout` expires.
 
         The `condition` can be arbitrary JavaScript expression but must contain
          a return statement (with the value to be returned) at the end.
@@ -238,7 +239,7 @@ class AppiumEnhanceLibrary(object):
                              execute_script(condition) == True)
 
     def get_horizontal_position(self, locator):
-        """Returns horizontal position of element identified by `locator`.
+        """Return horizontal position of element identified by `locator`.
 
         The position is returned in pixels off the left side of the page,
         as an integer. Fails if a matching element is not found.
@@ -249,7 +250,7 @@ class AppiumEnhanceLibrary(object):
         return x
 
     def get_vertical_position(self, locator):
-        """Returns vertical position of element identified by `locator`.
+        """Return vertical position of element identified by `locator`.
 
         The position is returned in pixels off the left side of the page,
         as an integer. Fails if a matching element is not found.
@@ -260,18 +261,80 @@ class AppiumEnhanceLibrary(object):
         return y
 
     def get_value(self, locator):
-        """Returns the value attribute of element identified by `locator`.
+        """Return the value attribute of element identified by `locator`.
 
         See `introduction` for details about locating elements.
         """
         return self.apu.get_element_attribute(locator, 'value')
 
     def get_text(self, locator):
-        """Returns the text value of element identified by `locator`.
+        """Return the text value of element identified by `locator`.
 
         See `introduction` for details about locating elements.
         """
         return self._get_text(locator)
+
+    def mouse_down_at(self, locator, xoffset, yoffset):
+        """Support `mouse down at` for AppiumLibrary.
+
+        Offsets are relative to the top-left corner of the element.
+
+        Args:
+         - locator: robot framework locator.
+         - xoffset: X offset to start.
+         - yoffset: Y offset to start.
+
+        Examples:
+        | Mouse Down At | id=canvas | 120 | 250 |
+        """
+        element = self.apu._element_find(locator, True, True)
+
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % locator)
+
+        ActionChains(self.apu._current_application()).\
+            move_to_element_with_offset(element, xoffset, yoffset).\
+            click_and_hold().perform()
+
+    def mouse_up_at(self, locator, xoffset, yoffset):
+        """Support `mouse up at` for Selenium2Library.
+
+        Right now use click off-line button to end mouse behaviour.
+
+        Offsets are relative to the top-left corner of the element.
+
+        Args:
+         - locator: robot framework locator.
+         - xoffset: X offset to end.
+         - yoffset: Y offset to end.
+
+        Examples:
+        | Mouse Up At | id=canvas | 320 | 830 |
+        """
+        element = self.apu._element_find(locator, True, True)
+
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % locator)
+
+        # The release() function here could not rightly performed. Use click
+        # off-line button instead.
+        ActionChains(self.apu._current_application()).\
+            move_to_element_with_offset(element, 1, 1).\
+            move_by_offset(xoffset, yoffset).click().perform()
+
+    def drag_and_drop_by_offset(self, source, xoffset, yoffset):
+        """Drag element identified with `source` which is a locator.
+
+        Element will be moved by xoffset and yoffset, each of which is a
+        negative or positive number specify the offset.
+
+        Examples:
+        | Drag And Drop By Offset | myElem | 50 | -35 |
+         # Move myElem 50px right and 35px down. |
+        """
+        src_elem = self.apu._element_find(source, True, True)
+        ActionChains(self.apu._current_application()).\
+            drag_and_drop_by_offset(src_elem, xoffset, yoffset).perform()
 
     # Private
 
@@ -281,7 +344,6 @@ class AppiumEnhanceLibrary(object):
             return element.is_displayed()
         return None
 
-    # Private
     def _get_text(self, locator):
         element = self.apu._element_find(locator, True, True)
         if element is not None:
