@@ -6,7 +6,7 @@ ___
 
   Bring back the missing keywords from [Selenium2Library](https://github.com/robotframework/Selenium2Library)  to [AppiumLibrary](https://github.com/jollychang/robotframework-appiumlibrary).
 
-  It depends on [AppiumLibrary](https://github.com/jollychang/robotframework-appiumlibrary) and use [active library instance](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#extending-existing-test-libraries) to enhance robotframework-appiumlibrary.
+  It based on [AppiumLibrary](https://github.com/jollychang/robotframework-appiumlibrary) and use [active library instance](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#extending-existing-test-libraries) to enhance robotframework-appiumlibrary.
 
 ## Installation
 
@@ -15,7 +15,7 @@ ___
  Robotframework-appiumlibrary should be installed first. And just put this library in your project. And link a reference for it.
 
     *** Settings ***
-    Libraries    AppiumEnhanceLibrary.py
+    Library    AppiumEnhanceLibrary.py
 
 
 ## Keywords
