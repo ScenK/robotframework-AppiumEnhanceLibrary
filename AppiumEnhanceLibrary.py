@@ -27,7 +27,7 @@ class AppiumEnhanceLibrary(object):
         super(AppiumEnhanceLibrary, self).__init__()
         self.apu = BuiltIn().get_library_instance('AppiumLibrary')
 
-    def execute_javascript(self, code):
+    def execute_javascript(self, *code):
         """Execute the given JavaScript code.
 
         `code` may contain multiple lines of code and may be divided into
@@ -196,23 +196,23 @@ class AppiumEnhanceLibrary(object):
 
         self.apu._wait_until_no_error(timeout, check_text)
 
-    def page_should_contain(self, text, loglevel):
+    def page_should_contain(self, text):
         """Verify that current page contains `text`.
 
         If this keyword fails, it automatically logs the page source
         using the log level specified with the optional `loglevel` argument.
         Giving `NONE` as level disables logging.
         """
-        self.apu.page_should_contain_text(self, text, loglevel=loglevel)
+        self.apu.page_should_contain_text(self, text)
 
-    def page_should_not_contain(self, text, loglevel):
+    def page_should_not_contain(self, text):
         """Verify that current page not contains `text`.
 
         If this keyword fails, it automatically logs the page source
         using the log level specified with the optional `loglevel` argument.
         Giving `NONE` as level disables logging.
         """
-        self.apu.page_should_not_contain_text(self, text, loglevel=loglevel)
+        self.apu.page_should_not_contain_text(self, text)
 
     def wait_for_condition(self, condition, timeout=None, error=None):
         """Wait until the given `condition` is true or `timeout` expires.
