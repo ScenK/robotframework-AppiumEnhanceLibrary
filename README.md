@@ -41,6 +41,7 @@ ___
 | Mouse Down At | locator | xoffset | yoffset |
 | Mouse Up At | locator | xoffset | yoffset |
 | Drag And Drop By Offset | locator | xoffset | yoffset |
+| Get Matching Xpath Count | xpath |
 
 ## Contributing
 
