@@ -356,6 +356,19 @@ class AppiumEnhanceLibrary(object):
         count = len(self.apu._element_find("xpath=" + xpath, False, False))
         return str(count)
 
+    def select_frame(self, locator):
+        """Sets frame identified by `locator` as current frame.
+
+        Key attributes for frames are `id` and `name.` See `introduction` for
+        details about locating elements.
+        """
+        element = self.apu._element_find(locator, True, True)
+        self.apu._current_application().switch_to_frame(element)
+
+    def unselect_frame(self):
+        """Sets the top frame as the current frame."""
+        self.apu._current_application().switch_to_default_content()
+
     # Private
 
     def _is_visible(self, locator):
