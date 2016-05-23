@@ -340,6 +340,22 @@ class AppiumEnhanceLibrary(object):
         ActionChains(self.apu._current_application()).\
             drag_and_drop_by_offset(locator, xoffset, yoffset).perform()
 
+    def get_matching_xpath_count(self, xpath):
+        """Returns number of elements matching `xpath`
+
+        One should not use the xpath= prefix for 'xpath'. XPath is assumed.
+
+        Correct:
+        | count = | Get Matching Xpath Count | //div[@id='sales-pop']
+        Incorrect:
+        | count = | Get Matching Xpath Count | xpath=//div[@id='sales-pop']
+
+        If you wish to assert the number of matching elements, use
+        `Xpath Should Match X Times`.
+        """
+        count = len(self.apu._element_find("xpath=" + xpath, False, False))
+        return str(count)
+
     # Private
 
     def _is_visible(self, locator):
