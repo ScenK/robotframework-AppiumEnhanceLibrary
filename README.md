@@ -42,6 +42,8 @@ ___
 | Mouse Up At | locator | xoffset | yoffset |
 | Drag And Drop By Offset | locator | xoffset | yoffset |
 | Get Matching Xpath Count | xpath |
+| Select Frame | locator |
+| Unselect Frame | locator |
 
 ## Contributing
 
