@@ -8,6 +8,7 @@ Detail imformation could be found on github.com:
 """
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.action_chains import ActionChains
+from AppiumLibrary.locators.elementfinder import ElementFinder
 
 
 class AppiumEnhanceLibrary(object):
@@ -19,6 +20,7 @@ class AppiumEnhanceLibrary(object):
         https://github.com/jollychang/robotframework-appiumlibrary
     """
 
+
     def __init__(self):
         """Init function.
 
@@ -26,6 +28,20 @@ class AppiumEnhanceLibrary(object):
         """
         super(AppiumEnhanceLibrary, self).__init__()
         self.apu = BuiltIn().get_library_instance('AppiumLibrary')
+        self.elementfinder = ElementFinder()
+        self._strategies = {
+            'identifier': self.elementfinder._find_by_identifier,
+            'id': self.elementfinder._find_by_id,
+            'name': self.elementfinder._find_by_name,
+            'xpath': self.elementfinder._find_by_xpath,
+            'class': self.elementfinder._find_by_class_name,
+            'accessibility_id': self.elementfinder._find_element_by_accessibility_id,
+            'android': self.elementfinder._find_by_android,
+            'ios': self.elementfinder._find_by_ios,
+            'css': self.elementfinder._find_by_css_selector,
+            'jquery': self.elementfinder._find_by_sizzle_selector,
+            None: self.elementfinder._find_by_default
+        }
 
     def execute_javascript(self, *code):
         """Execute the given JavaScript code.
@@ -368,6 +384,10 @@ class AppiumEnhanceLibrary(object):
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
         self.apu._current_application().switch_to_default_content()
+
+
+    def add_jquery_selector(self):
+        ElementFinder.__init__=self._strategies
 
     # Private
 
