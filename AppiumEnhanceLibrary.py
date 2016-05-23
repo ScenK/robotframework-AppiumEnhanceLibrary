@@ -6,6 +6,7 @@ It will bring back these missing keywords from robotframework selenium2library.
 Detail imformation could be found on github.com:
     https://github.com/ScenK/robotframework-AppiumEnhanceLibrary
 """
+import os
 from robot.libraries.BuiltIn import BuiltIn
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -49,8 +50,8 @@ class AppiumEnhanceLibrary(object):
         | ${sum}=            | Execute JavaScript           | return 1 + 1; |
         | Should Be Equal    | ${sum}                       | ${2}          |
         """
-        driver = self.apu._current_application()
-        return driver.execute_script(code)
+        js = self._get_javascript_to_execute(''.join(code))
+        return self.apu._current_application().execute_script(js)
 
     def wait_until_element_is_visible(self, locator, timeout=None, error=None):
         """Wait until element specified with `locator` is visible.
@@ -382,3 +383,14 @@ class AppiumEnhanceLibrary(object):
         if element is not None:
             return element.text
         return None
+
+    @staticmethod
+    def _get_javascript_to_execute(code):
+        codepath = code.replace('/', os.sep)
+        if not (os.path.isabs(codepath) and os.path.isfile(codepath)):
+            return code
+        codefile = open(codepath)
+        try:
+            return codefile.read().strip()
+        finally:
+            codefile.close()
