@@ -373,10 +373,6 @@ uLiu
         """Sets the top frame as the current frame."""
         self.apu._current_application().switch_to_default_content()
 
-
-    def add_jquery_selector(self):
-        ElementFinder.__init__=self._strategies
-
     def get_element_attribute(self, attribute_locator):
         """Return value of element attribute.
 
