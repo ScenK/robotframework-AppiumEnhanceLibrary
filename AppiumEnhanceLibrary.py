@@ -28,20 +28,7 @@ class AppiumEnhanceLibrary(object):
         """
         super(AppiumEnhanceLibrary, self).__init__()
         self.apu = BuiltIn().get_library_instance('AppiumLibrary')
-        self.elementfinder = ElementFinder()
-        self._strategies = {
-            'identifier': self.elementfinder._find_by_identifier,
-            'id': self.elementfinder._find_by_id,
-            'name': self.elementfinder._find_by_name,
-            'xpath': self.elementfinder._find_by_xpath,
-            'class': self.elementfinder._find_by_class_name,
-            'accessibility_id': self.elementfinder._find_element_by_accessibility_id,
-            'android': self.elementfinder._find_by_android,
-            'ios': self.elementfinder._find_by_ios,
-            'css': self.elementfinder._find_by_css_selector,
-            'jquery': self.elementfinder._find_by_sizzle_selector,
-            None: self.elementfinder._find_by_default
-        }
+
 
     def execute_javascript(self, code):
         """Execute the given JavaScript code.
@@ -60,7 +47,8 @@ class AppiumEnhanceLibrary(object):
         JavaScript. Return values are converted to the appropriate type in
         Python, including WebElements.
 
-        Examples:
+        Examples:libraries/AppiumEnhanceLibrary.py
+uLiu
         | Execute JavaScript | window.my_js('arg1', 'arg2') |               |
         | ${sum}=            | Execute JavaScript           | return 1 + 1; |
         | Should Be Equal    | ${sum}                       | ${2}          |
@@ -389,6 +377,20 @@ class AppiumEnhanceLibrary(object):
     def add_jquery_selector(self):
         ElementFinder.__init__=self._strategies
 
+    def get_element_attribute(self, attribute_locator):
+        """Return value of element attribute.
+
+        `attribute_locator` consists of element locator followed by an @ sign
+        and attribute name, for example "element_id@class".
+        """
+        locator, attribute_name = self._parse_attribute_locator(
+            attribute_locator)
+        element = self.apu._element_find(locator, True, False)
+        if element is None:
+            raise ValueError("Element '%s' not found." % (locator))
+        return element.get_attribute(attribute_name)
+
+
     # Private
 
     def _is_visible(self, locator):
@@ -402,3 +404,13 @@ class AppiumEnhanceLibrary(object):
         if element is not None:
             return element.text
         return None
+
+    def _parse_attribute_locator(self, attribute_locator):
+        parts = attribute_locator.rpartition('@')
+        if len(parts[0]) == 0:
+            raise ValueError("Attribute locator '%s' does not contain "
+                             "an element locator." % (attribute_locator))
+        if len(parts[2]) == 0:
+            raise ValueError("Attribute locator '%s' does not "
+                            "contain an attribute name." % (attribute_locator))
+        return (parts[0], parts[2])
