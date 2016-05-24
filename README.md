@@ -44,6 +44,7 @@ ___
 | Get Matching Xpath Count | xpath |
 | Select Frame | locator |
 | Unselect Frame | locator |
+| Get Element Attribute | attribute_locator |
 
 ## Contributing
 

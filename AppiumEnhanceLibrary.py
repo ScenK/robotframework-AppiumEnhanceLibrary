@@ -342,7 +342,7 @@ class AppiumEnhanceLibrary(object):
             drag_and_drop_by_offset(locator, xoffset, yoffset).perform()
 
     def get_matching_xpath_count(self, xpath):
-        """Returns number of elements matching `xpath`
+        """Return number of elements matching `xpath`.
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
 
@@ -358,7 +358,7 @@ class AppiumEnhanceLibrary(object):
         return str(count)
 
     def select_frame(self, locator):
-        """Sets frame identified by `locator` as current frame.
+        """Set frame identified by `locator` as current frame.
 
         Key attributes for frames are `id` and `name.` See `introduction` for
         details about locating elements.
@@ -367,8 +367,21 @@ class AppiumEnhanceLibrary(object):
         self.apu._current_application().switch_to_frame(element)
 
     def unselect_frame(self):
-        """Sets the top frame as the current frame."""
+        """Set the top frame as the current frame."""
         self.apu._current_application().switch_to_default_content()
+
+    def get_element_attribute(self, attribute_locator):
+        """Return value of element attribute.
+
+        `attribute_locator` consists of element locator followed by an @ sign
+        and attribute name, for example "element_id@class".
+        """
+        locator, attribute_name = self._parse_attribute_locator(
+            attribute_locator)
+        element = self.apu._element_find(locator, True, False)
+        if element is None:
+            raise ValueError("Element '%s' not found." % (locator))
+        return element.get_attribute(attribute_name)
 
     # Private
 
@@ -394,3 +407,14 @@ class AppiumEnhanceLibrary(object):
             return codefile.read().strip()
         finally:
             codefile.close()
+
+    def _parse_attribute_locator(self, attribute_locator):
+        parts = attribute_locator.rpartition('@')
+        if len(parts[0]) == 0:
+            raise ValueError("Attribute locator '%s' does not contain "
+                             "an element locator." % (attribute_locator))
+        if len(parts[2]) == 0:
+            raise ValueError("Attribute locator '%s' does not "
+                             "contain an attribute name." % (attribute_locator)
+                             )
+        return (parts[0], parts[2])
