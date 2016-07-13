@@ -143,6 +143,24 @@ class AppiumEnhanceLibrary(object):
                           "but it is." % locator
             raise AssertionError(message)
 
+    def element_should_contain(self, locator, expected, message=''):
+        """Verifies element identified by `locator` contains text `expected`.
+
+        If you wish to assert an exact (not a substring) match on the text
+        of the element, use `Element Text Should Be`.
+
+        `message` can be used to override the default error message.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        """
+        actual = self._get_text(locator)
+        if not expected in actual:
+            if not message:
+                message = "Element '%s' should have contained text '%s' but " \
+                          "its text was '%s'." % (locator, expected, actual)
+            raise AssertionError(message)
+
     def wait_until_element_contains(self, locator, text, timeout=None,
                                     error=None):
         """Wait until given element contains `text`.
@@ -342,7 +360,7 @@ class AppiumEnhanceLibrary(object):
             drag_and_drop_by_offset(locator, xoffset, yoffset).perform()
 
     def get_matching_xpath_count(self, xpath):
-        """Return number of elements matching `xpath`.
+        """Returns number of elements matching `xpath`
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
 
@@ -358,7 +376,7 @@ class AppiumEnhanceLibrary(object):
         return str(count)
 
     def select_frame(self, locator):
-        """Set frame identified by `locator` as current frame.
+        """Sets frame identified by `locator` as current frame.
 
         Key attributes for frames are `id` and `name.` See `introduction` for
         details about locating elements.
@@ -367,7 +385,7 @@ class AppiumEnhanceLibrary(object):
         self.apu._current_application().switch_to_frame(element)
 
     def unselect_frame(self):
-        """Set the top frame as the current frame."""
+        """Sets the top frame as the current frame."""
         self.apu._current_application().switch_to_default_content()
 
     def get_element_attribute(self, attribute_locator):
@@ -380,8 +398,18 @@ class AppiumEnhanceLibrary(object):
             attribute_locator)
         element = self.apu._element_find(locator, True, False)
         if element is None:
-            raise ValueError("Element '%s' not found." % (locator))
+            raise ValueError("Element '%s' not found." % locator)
         return element.get_attribute(attribute_name)
+
+    def get_element_size(self, locator):
+        """Get element size
+
+         Examples:
+        | ${size}=  | Get Element Size  | css=.items |
+        """
+        element_size = self.apu.get_element_size(locator)
+        size = (element_size['width'], element_size['height'])
+        return size
 
     # Private
 
@@ -398,6 +426,19 @@ class AppiumEnhanceLibrary(object):
         return None
 
     @staticmethod
+    def _parse_attribute_locator(attribute_locator):
+        parts = attribute_locator.rpartition('@')
+        if len(parts[0]) == 0:
+            raise ValueError(
+                "Attribute locator '%s' does not contain an element locator."
+                % attribute_locator)
+        if len(parts[2]) == 0:
+            raise ValueError(
+                "Attribute locator '%s' does not contain an attribute name."
+                % attribute_locator)
+        return parts[0], parts[2]
+
+    @staticmethod
     def _get_javascript_to_execute(code):
         codepath = code.replace('/', os.sep)
         if not (os.path.isabs(codepath) and os.path.isfile(codepath)):
@@ -407,14 +448,3 @@ class AppiumEnhanceLibrary(object):
             return codefile.read().strip()
         finally:
             codefile.close()
-
-    def _parse_attribute_locator(self, attribute_locator):
-        parts = attribute_locator.rpartition('@')
-        if len(parts[0]) == 0:
-            raise ValueError("Attribute locator '%s' does not contain "
-                             "an element locator." % (attribute_locator))
-        if len(parts[2]) == 0:
-            raise ValueError("Attribute locator '%s' does not "
-                             "contain an attribute name." % (attribute_locator)
-                             )
-        return (parts[0], parts[2])
