@@ -27,6 +27,7 @@ ___
 | Execute Javascript | code       |
 | Wait Until Element Is Visible   | locator | timeout=None | error=None |
 | Wait Until Element Is Not Visible | locator | timeout=None  | error=None |
+| Element Should Contain | locator | expected | message='' | 
 | Element Should Be Visible | locator | message='' |    |
 | Element Should Not Be Bisible | locator | message='' |
 | Wait Until Element Contains | locator | text | timeout=None | error=None |
@@ -34,6 +35,7 @@ ___
 | Page Should Contain | text |
 | Page Should Not Contain | text |
 | Wait For Condition | condition | timeout=None | error=None |
+| Get Element Size | locator |
 | Get Horizontal Position | locator |
 | Get Vertical Position | locator |
 | Get Value | locator |
